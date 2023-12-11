@@ -39,7 +39,7 @@ function randomUpperCase() {
 function randomLowerCase() {
     return String.fromCharCode(randomNumberBetween(97 , 123));
 }
-let symbols = "_!@#$_%&(_)[_]{_}/?_\|"
+let symbols = "_!@#$%&()[]{}/?\|"
 function randomSymbol() {
     return symbols[randomNumberBetween(0 , symbols.length)];
 }
@@ -71,43 +71,44 @@ length.addEventListener('input' , (event) => {
 document.querySelector('[generate]').addEventListener('click' , randomPass)
 function randomPass() {
     let p = [];
-    if(number.checked) {
-        p.push(0);
-    }
+    
     if(uppercase.checked) {
-        p.push(1);
+        p.push(randomUpperCase);
     }
     if(lowercase.checked) {
-        p.push(2);
+        p.push(randomLowerCase);
+    }
+    if(number.checked) {
+        p.push(randomDigit);
     }
     if(symbol.checked) {
-        p.push(3);
+        p.push(randomSymbol);
     }
     if(p.length == 0) return ;
     let password = "";
-    let l = length.value;
-    for(let i = l; i > 0; i--) {
-        let opr = p[randomNumberBetween(0 , p.length)];
-        let op = "";
 
-        switch(opr) {
-            case 0:
-                op = randomDigit();
-                password  = password + op;
-                break;
-            case 1:
-                op = randomUpperCase();
-                password = password + op;
-                break;
-            case 2:
-                op = randomLowerCase();
-                password = password + op;
-                break;
-            case 3:
-                op =  randomSymbol()
-                password = password + op;
-        }
+    for(let i = 0; i < p.length; i++) {
+        password += p[i]();
     }
-    checkStrength(p);
-    passwd.value = password;
+    let l = length.value;
+    for(let i = p.length; i < l; i++) {
+        password += p[randomNumberBetween(0 , p.length)]();
+    }
+        checkStrength(p);
+
+        passwd.value = sufflePassword(Array.from(password));
+}
+
+
+function sufflePassword(arr) {
+    let str = "";
+    for(let i = 1; i < arr.length; i++) {
+        let j = Math.floor(Math.random() * (i+1));
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    for(let c of arr)    str += c;
+    return str;
 }
