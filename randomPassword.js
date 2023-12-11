@@ -10,15 +10,13 @@ let symbol = document.querySelector('#symbols');
 let length = document.querySelector('[pass-len]');
 
 
-copybtn.addEventListener('click' , (event) => {
-    let check = copybtn.nextElementSibling;    
+copybtn.addEventListener('click' , (event) => { 
+    if(passwd.value)
     navigator.clipboard.writeText(passwd.value)
     .then(res => {        
-        copybtn.style.display = 'none';
-        check.style.display = 'block';
+        copybtn.classList.add('copied');
         setTimeout(() => {
-            copybtn.style.display = 'block';
-            check.style.display = 'none';
+            copybtn.classList.remove('copied');
         } , 2000);
     })
     .catch(err => {
@@ -53,19 +51,20 @@ function checkStrength(p) {
         circle.classList.remove('good');
         circle.classList.add('strong');
     }
-    else if((number.checked & lowercase.checked & uppercase.checked) | (symbol.checked & number.checked & uppercase.checked) | ((symbol.checked & number.checked & lowercase.checked))| (length.value >= 10 && p.length > 1 & symbol.checked)) {
+    else if((number.checked & lowercase.checked & uppercase.checked) | (symbol.checked & number.checked & uppercase.checked) | ((symbol.checked & number.checked & lowercase.checked))| (length.value >= 10 && p.length > 1 & symbol.checked) | (length.value >= 15 && p.length > 1 )) {
         circle.classList.remove('weak');
         circle.classList.remove('strong');
         circle.classList.add('good');
     }
     else {
-        circle.classList.add('weak');
         circle.classList.remove('good');
         circle.classList.remove('strong');
+        circle.classList.add('weak');
     }
 }
 
-length.addEventListener('change' , (event) => {
+length.addEventListener('input' , (event) => {
+    length.style.backgroundSize = `${((length.value-0) * 100 / 20)}% 100%`
     document.querySelector('[display-len]').innerText = length.value;
 })
 
@@ -84,6 +83,7 @@ function randomPass() {
     if(symbol.checked) {
         p.push(3);
     }
+    if(p.length == 0) return ;
     let password = "";
     let l = length.value;
     for(let i = l; i > 0; i--) {
