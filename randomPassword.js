@@ -64,7 +64,7 @@ function checkStrength(p) {
 }
 
 length.addEventListener('input' , (event) => {
-    length.style.backgroundSize = `${((length.value-0) * 100 / 20)}% 100%`
+    length.style.backgroundSize = `${((length.value-0) * 100 / 20)}% 100%`;
     document.querySelector('[display-len]').innerText = length.value;
 })
 
@@ -111,4 +111,24 @@ function sufflePassword(arr) {
 
     for(let c of arr)    str += c;
     return str;
+}
+
+
+
+let pass_len = 0;
+let checkboxes = document.querySelectorAll('.check-box input');
+
+for(let checkbox of checkboxes) {
+    checkbox.addEventListener('click' , e => {
+        if(e.target.checked) {
+            pass_len++;
+        }
+        else {
+            pass_len--;
+        }
+
+        if(pass_len > length.value) {
+            document.querySelector('[display-len]').innerText = pass_len;
+        }
+    })
 }
