@@ -8,6 +8,8 @@ let lowercase = document.querySelector('#lowercase');
 let symbol = document.querySelector('#symbols');
 
 let length = document.querySelector('[pass-len]');
+let pass_len = 0;
+let checkboxes = document.querySelectorAll('.check-box input');
 
 
 copybtn.addEventListener('click' , (event) => { 
@@ -64,8 +66,13 @@ function checkStrength(p) {
 }
 
 length.addEventListener('input' , (event) => {
-    length.style.backgroundSize = `${((length.value-0) * 100 / 20)}% 100%`;
-    document.querySelector('[display-len]').innerText = length.value;
+    if(event.target.value < pass_len) {
+        length.value = pass_len;
+    }
+    else {
+        length.style.backgroundSize = `${((length.value-0) * 100 / 20)}% 100%`;
+        document.querySelector('[display-len]').innerText = length.value;
+    }
 })
 
 document.querySelector('[generate]').addEventListener('click' , randomPass)
@@ -115,9 +122,6 @@ function sufflePassword(arr) {
 
 
 
-let pass_len = 0;
-let checkboxes = document.querySelectorAll('.check-box input');
-
 for(let checkbox of checkboxes) {
     checkbox.addEventListener('click' , e => {
         if(e.target.checked) {
@@ -129,6 +133,8 @@ for(let checkbox of checkboxes) {
 
         if(pass_len > length.value) {
             document.querySelector('[display-len]').innerText = pass_len;
+            length.value = pass_len;
+            length.style.backgroundSize = `${((length.value-0) * 100 / 20)}% 100%`;
         }
     })
 }
